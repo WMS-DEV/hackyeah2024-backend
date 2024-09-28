@@ -1,6 +1,7 @@
 package pl.wmsdev.sportly.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Service;
 import pl.wmsdev.sportly.dto.EventDTO;
 import pl.wmsdev.sportly.dto.EventRequest;
@@ -45,8 +46,8 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Event createEvent(EventRequest eventRequest) {
 
-		Participant creator = participantService.findParticipantById(eventRequest.creatorId());
-		Category category = categoryService.getCategoryById(eventRequest.categoryId());
+		Participant creator = participantService.findParticipantById(eventRequest.creatorId()).orElseThrow();
+		Category category = categoryService.findCategoryById(eventRequest.categoryId()).orElseThrow();
 
 		Event event = Event.builder()
 				.name(eventRequest.name())
@@ -76,5 +77,31 @@ public class EventServiceImpl implements EventService {
 
 	private Integer calculateCalories(Category category, Long startTime, Long endTime) {
 		return (int) (category.getCaloriesPerHour() * (endTime - startTime) / MILLIS_IN_HOUR);
+	}
+
+	@Override
+	public void joinEvent(Long eventId, Long participantId) {
+		Event event = eventRepository.findById(eventId).orElseThrow();
+		Participant participant = participantService.findParticipantById(participantId).orElseThrow();
+
+		if (event.getMaxParticipants() == event.getParticipants().size()) {
+			throw new RequestRejectedException("Event is full");
+		}
+
+		event.addParticipant(participant);
+		eventRepository.save(event);
+	}
+
+	@Override
+	public void leaveEvent(Long eventId, Long participantId) {
+		Event event = eventRepository.findById(eventId).orElseThrow();
+		Participant participant = participantService.findParticipantById(participantId).orElseThrow();
+
+		if (participant.equals(event.getCreator())) {
+			throw new RequestRejectedException("Creator cannot leave the event, cancel it instead");
+		}
+
+		event.removeParticipant(participant);
+		eventRepository.save(event);
 	}
 }

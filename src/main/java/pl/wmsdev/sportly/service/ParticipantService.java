@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface ParticipantService {
 
-	Participant findParticipantById(Long id);
+	Optional<Participant> findParticipantById(Long id);
 
 	Optional<Participant> findParticipantByEmail(String email);
 }

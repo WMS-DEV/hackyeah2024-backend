@@ -14,8 +14,8 @@ public class ParticipantServiceImpl implements ParticipantService {
 	private final ParticipantRepository participantRepository;
 
 	@Override
-	public Participant findParticipantById(Long id) {
-		return participantRepository.findById(id).orElseThrow();
+	public Optional<Participant> findParticipantById(Long id) {
+		return participantRepository.findById(id);
 	}
 
 	@Override

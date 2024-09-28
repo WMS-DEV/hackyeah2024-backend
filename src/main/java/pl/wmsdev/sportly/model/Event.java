@@ -55,4 +55,9 @@ public class Event {
 		participants.add(participant);
 		participant.getEvents().add(this);
 	}
+
+	public void removeParticipant(Participant participant) {
+		participants.remove(participant);
+		participant.getEvents().remove(this);
+	}
 }

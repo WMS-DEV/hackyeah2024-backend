@@ -15,4 +15,8 @@ public interface EventService {
 	void deleteEvent(Long id);
 
 	Event createEvent(EventRequest eventRequest);
+
+	void joinEvent(Long eventId, Long participantId);
+
+	void leaveEvent(Long eventId, Long participantId);
 }
