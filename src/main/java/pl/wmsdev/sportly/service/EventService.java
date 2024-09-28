@@ -10,5 +10,7 @@ public interface EventService {
 
 	List<EventDTO> getAllEvents();
 
+	EventDTO getEventById(Long id);
+
 	Event createEvent(EventRequest eventRequest);
 }

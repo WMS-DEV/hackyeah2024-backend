@@ -29,6 +29,13 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	public EventDTO getEventById(Long id) {
+		return eventRepository.findById(id)
+				.map(eventMapper::eventToEventDTO)
+				.orElseThrow();
+	}
+
+	@Override
 	public Event createEvent(EventRequest eventRequest) {
 
 		Participant creator = participantService.findParticipantById(eventRequest.creatorId());

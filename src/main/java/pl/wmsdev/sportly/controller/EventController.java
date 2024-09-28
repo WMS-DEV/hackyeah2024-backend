@@ -13,24 +13,28 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/events")
 @RequiredArgsConstructor
 @Slf4j
 public class EventController {
 
 	private final EventService eventService;
 
-	@GetMapping("/events")
+	@GetMapping
 	public ResponseEntity<List<EventDTO>> getAllEvents() {
 		List<EventDTO> events = eventService.getAllEvents();
 		return ResponseEntity.ok(events);
 	}
 
-	@PostMapping("/events")
+	@GetMapping("/{id}")
+	public ResponseEntity<EventDTO> getEventById(@PathVariable Long id) {
+		EventDTO event = eventService.getEventById(id);
+		return ResponseEntity.ok(event);
+	}
+
+	@PostMapping
 	public ResponseEntity<?> createEvent(@RequestBody EventRequest eventRequest) {
-
 		Event event = eventService.createEvent(eventRequest);
-
 		return ResponseEntity.created(URI.create("/api/v1/event/" + event.getId())).build();
 	}
 
