@@ -16,6 +16,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
+	private static final int MILLIS_IN_HOUR = 3_600_000;
+
 	private final EventRepository eventRepository;
 	private final ParticipantService participantService;
 	private final CategoryService categoryService;
@@ -55,6 +57,7 @@ public class EventServiceImpl implements EventService {
 				.ageGroup(eventRequest.age())
 				.latitude(eventRequest.latitude())
 				.longitude(eventRequest.longitude())
+				.calories(calculateCalories(category, eventRequest.startTime(), eventRequest.endTime()))
 				.build();
 
 		event.addParticipant(creator);
@@ -64,5 +67,9 @@ public class EventServiceImpl implements EventService {
 		}
 
 		return eventRepository.save(event);
+	}
+
+	private Integer calculateCalories(Category category, Long startTime, Long endTime) {
+		return (int) (category.getCaloriesPerHour() * (endTime - startTime) / MILLIS_IN_HOUR);
 	}
 }

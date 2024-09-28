@@ -1,0 +1,2 @@
+name,categoryId,creatorId,latitude,longitude,description,startTime,endTime,cyclic,maxNumberOfParticipants,inviteEmails,isPublic,requiredExperience,age
+Let's play basketball,2,1,50.073718723131456,19.98316347623581,Anyone is welcome,1727625600000,1727632800000,WEEKLY,12,simon@wmsdev.pl;mark@gmail.com,true,NOVICE,ALL

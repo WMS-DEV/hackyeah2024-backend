@@ -1,30 +1,41 @@
 package pl.wmsdev.sportly.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import pl.wmsdev.sportly.dto.EventRequest;
 import pl.wmsdev.sportly.model.Category;
-import pl.wmsdev.sportly.model.Event;
 import pl.wmsdev.sportly.model.Participant;
 import pl.wmsdev.sportly.repository.CategoryRepository;
 import pl.wmsdev.sportly.repository.EventRepository;
 import pl.wmsdev.sportly.repository.ParticipantRepository;
+import pl.wmsdev.sportly.service.EventService;
 import pl.wmsdev.sportly.values.AgeGroup;
 import pl.wmsdev.sportly.values.Cycle;
 import pl.wmsdev.sportly.values.RequiredExperience;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class Bootstrap implements CommandLineRunner {
 
+	private final static String CATEGORIES_PATH = "/mockdata/categories.csv";
+	private final static String PARTICIPANTS_PATH = "/mockdata/participants.csv";
+	private final static String EVENTS_PATH = "/mockdata/eventRequests.csv";
+
 	private final EventRepository eventRepository;
 	private final CategoryRepository categoryRepository;
 	private final ParticipantRepository participantRepository;
+
+	private final EventService eventService;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -32,40 +43,23 @@ public class Bootstrap implements CommandLineRunner {
 		categoryRepository.deleteAll();
 		participantRepository.deleteAll();
 
-		addCategory("Soccer", 500L);
-		addCategory("Basketball", 450L);
-		addCategory("Running", 600L);
-		addCategory("Tennis", 450L);
+		loadCategories();
+		loadParticipants();
+		loadEvents();
+	}
 
-		addParticipant("Maciek", "maciek@gmail.com");
-		addParticipant("Szymon", "szymon@gmail.com");
-		addParticipant("Tymek", "tymek@gmail.com");
+	@SneakyThrows
+	private void loadCategories() {
+		InputStream categoriesStream = getClass().getResourceAsStream(CATEGORIES_PATH);
 
-		Participant participant = participantRepository.findAll().get(0);
-		Category category = categoryRepository.findAll().get(1);
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(categoriesStream, StandardCharsets.UTF_8))) {
+			String line;
 
-		Event event = Event.builder()
-				.creator(participant)
-				.name("Gramy w kosza")
-				.description("Czwartek to super dzień na koszykówkę")
-				.cyclic(Cycle.WEEKLY)
-				.ageGroup(AgeGroup.ALL)
-				.startTime(System.currentTimeMillis())
-				.endTime(System.currentTimeMillis() + 3600)
-				.requiredExperience(RequiredExperience.NOVICE)
-				.maxParticipants(8)
-				.isPublic(true)
-				.latitude(34.6)
-				.longitude(34.1)
-				.build();
-
-		eventRepository.saveAndFlush(event);
-		event.addParticipant(participant);
-		event.setCategory(category);
-
-		log.info("Event: {}", event);
-
-		eventRepository.save(event);
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				addCategory(data[0], Long.parseLong(data[1]));
+			}
+		}
 	}
 
 	private void addCategory(String name, Long calories) {
@@ -77,6 +71,20 @@ public class Bootstrap implements CommandLineRunner {
 		categoryRepository.save(category);
 	}
 
+	@SneakyThrows
+	private void loadParticipants() {
+		InputStream participantsPath = getClass().getResourceAsStream(PARTICIPANTS_PATH);
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(participantsPath, StandardCharsets.UTF_8))) {
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				addParticipant(data[0], data[1]);
+			}
+		}
+	}
+
 	private void addParticipant(String name, String email) {
 		Participant participant = Participant.builder()
 				.name(name)
@@ -84,5 +92,36 @@ public class Bootstrap implements CommandLineRunner {
 				.build();
 
 		participantRepository.save(participant);
+	}
+
+	@SneakyThrows
+	private void loadEvents() {
+		InputStream eventsPath = getClass().getResourceAsStream(EVENTS_PATH);
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(eventsPath, StandardCharsets.UTF_8))) {
+			String line = reader.readLine();
+
+			while ((line = reader.readLine()) != null) {
+				String[] data = line.split(",");
+				EventRequest eventRequest = EventRequest.builder()
+						.name(data[0])
+						.categoryId(Long.parseLong(data[1]))
+						.creatorId(Long.parseLong(data[2]))
+						.latitude(Double.parseDouble(data[3]))
+						.longitude(Double.parseDouble(data[4]))
+						.description(data[5])
+						.startTime(Long.parseLong(data[6]))
+						.endTime(Long.parseLong(data[7]))
+						.cyclic(Cycle.valueOf(data[8]))
+						.maxNumberOfParticipants(Integer.parseInt(data[9]))
+						.inviteEmails(List.of(data[10].split(";")))
+						.isPublic(Boolean.parseBoolean(data[11]))
+						.requiredExperience(RequiredExperience.valueOf(data[12]))
+						.age(AgeGroup.valueOf(data[13]))
+						.build();
+
+				eventService.createEvent(eventRequest);
+			}
+		}
 	}
 }

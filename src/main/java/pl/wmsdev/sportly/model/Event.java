@@ -49,6 +49,7 @@ public class Event {
 	private Boolean isPublic;
 	private RequiredExperience requiredExperience;
 	private AgeGroup ageGroup;
+	private Integer calories;
 
 	public void addParticipant(Participant participant) {
 		participants.add(participant);
