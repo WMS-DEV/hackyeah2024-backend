@@ -31,6 +31,7 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 		configuration.addAllowedOrigin(frontendUrl);
 		configuration.addAllowedOrigin("http://localhost");
+		configuration.addAllowedOrigin("https://hackyeah2024-backend.wmsdev.pl");
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "HEAD", "OPTIONS"));
 		configuration.addAllowedHeader("*");
 		configuration.setAllowCredentials(true);
