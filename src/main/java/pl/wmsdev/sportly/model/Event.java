@@ -39,8 +39,8 @@ public class Event {
 	private Cycle cyclic;
 	private Integer maxParticipants;
 
-	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-	@JoinTable(name = "particpant_events",
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "participant_event",
 		joinColumns = @JoinColumn(name = "event_id"),
 		inverseJoinColumns = @JoinColumn(name = "participant_id"))
 	@ToString.Exclude
