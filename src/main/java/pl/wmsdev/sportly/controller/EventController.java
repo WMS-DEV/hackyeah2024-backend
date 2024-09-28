@@ -44,4 +44,11 @@ public class EventController {
 		return ResponseEntity.created(URI.create("/api/v1/events/" + event.getId())).build();
 	}
 
+	@DeleteMapping("/{id}")
+	@Operation(summary = "Delete event by id")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteEvent(@PathVariable Long id) {
+		eventService.deleteEvent(id);
+	}
+
 }

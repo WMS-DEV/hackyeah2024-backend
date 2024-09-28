@@ -38,6 +38,11 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
+	public void deleteEvent(Long id) {
+		eventRepository.deleteById(id);
+	}
+
+	@Override
 	public Event createEvent(EventRequest eventRequest) {
 
 		Participant creator = participantService.findParticipantById(eventRequest.creatorId());

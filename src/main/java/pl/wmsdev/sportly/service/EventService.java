@@ -12,5 +12,7 @@ public interface EventService {
 
 	EventDTO getEventById(Long id);
 
+	void deleteEvent(Long id);
+
 	Event createEvent(EventRequest eventRequest);
 }
