@@ -3,6 +3,7 @@ package pl.wmsdev.sportly.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wmsdev.sportly.dto.ParticipantDTO;
+import pl.wmsdev.sportly.dto.ParticipantRequest;
 import pl.wmsdev.sportly.mapper.ParticipantMapper;
 import pl.wmsdev.sportly.model.Participant;
 import pl.wmsdev.sportly.repository.ParticipantRepository;
@@ -24,6 +25,15 @@ public class ParticipantServiceImpl implements ParticipantService {
 	@Override
 	public Optional<Participant> findParticipantById(String email) {
 		return participantRepository.findByEmail(email);
+	}
+
+	@Override
+	public Participant registerParticipant(ParticipantRequest participantRequest) {
+		Participant participant = Participant.builder()
+				.name(participantRequest.name())
+				.email(participantRequest.email())
+				.build();
+		return participantRepository.save(participant);
 	}
 
 	@Override
