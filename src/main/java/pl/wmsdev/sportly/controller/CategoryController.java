@@ -1,11 +1,11 @@
-package pl.wmsdev.unisearch.controller;
+package pl.wmsdev.sportly.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.wmsdev.unisearch.dto.CategoryDTO;
-import pl.wmsdev.unisearch.service.CategoryService;
+import pl.wmsdev.sportly.dto.CategoryDTO;
+import pl.wmsdev.sportly.service.CategoryService;
 
 import java.util.List;
 

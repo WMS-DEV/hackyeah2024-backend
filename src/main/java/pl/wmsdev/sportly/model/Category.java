@@ -1,4 +1,4 @@
-package pl.wmsdev.unisearch.model;
+package pl.wmsdev.sportly.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,12 +12,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Participant {
+@ToString
+public class Category {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	private String name;
-	private String email;
+	private Long caloriesPerHour;
 }

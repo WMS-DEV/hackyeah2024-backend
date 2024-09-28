@@ -1,4 +1,4 @@
-package pl.wmsdev.unisearch.config;
+package pl.wmsdev.sportly.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

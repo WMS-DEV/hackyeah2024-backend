@@ -1,9 +1,9 @@
-package pl.wmsdev.unisearch.mapper;
+package pl.wmsdev.sportly.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
-import pl.wmsdev.unisearch.dto.CategoryDTO;
-import pl.wmsdev.unisearch.model.Category;
+import pl.wmsdev.sportly.dto.CategoryDTO;
+import pl.wmsdev.sportly.model.Category;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CategoryMapper {

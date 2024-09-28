@@ -1,10 +1,10 @@
-package pl.wmsdev.unisearch.service;
+package pl.wmsdev.sportly.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wmsdev.unisearch.dto.CategoryDTO;
-import pl.wmsdev.unisearch.mapper.CategoryMapper;
-import pl.wmsdev.unisearch.repository.CategoryRepository;
+import pl.wmsdev.sportly.dto.CategoryDTO;
+import pl.wmsdev.sportly.mapper.CategoryMapper;
+import pl.wmsdev.sportly.repository.CategoryRepository;
 
 import java.util.List;
 
