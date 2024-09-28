@@ -1,5 +1,6 @@
 package pl.wmsdev.sportly.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	@GetMapping
+	@Operation(summary = "Get all categories")
 	public ResponseEntity<List<CategoryDTO>> getCategories() {
 		return ResponseEntity.ok(categoryService.getCategories());
 	}
