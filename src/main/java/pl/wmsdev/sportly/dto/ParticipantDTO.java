@@ -1,4 +1,6 @@
 package pl.wmsdev.sportly.dto;
 
-public record ParticipantDTO(Long id, String name, String email) {
+import java.util.Set;
+
+public record ParticipantDTO(Long id, String name, String email, Set<EventSimpleDTO> events) {
 }

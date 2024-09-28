@@ -8,7 +8,6 @@ import pl.wmsdev.sportly.model.Category;
 import pl.wmsdev.sportly.repository.CategoryRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
 	@Override
-	public Optional<Category> findCategoryById(Long id) {
-		return categoryRepository.findById(id);
+	public Category getCategoryById(Long id) {
+		return categoryRepository.findById(id).orElseThrow();
 	}
 }

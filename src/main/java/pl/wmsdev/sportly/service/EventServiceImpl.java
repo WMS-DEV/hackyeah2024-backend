@@ -47,7 +47,7 @@ public class EventServiceImpl implements EventService {
 	public Event createEvent(EventRequest eventRequest) {
 
 		Participant creator = participantService.findParticipantById(eventRequest.creatorId()).orElseThrow();
-		Category category = categoryService.findCategoryById(eventRequest.categoryId()).orElseThrow();
+		Category category = categoryService.getCategoryById(eventRequest.categoryId());
 
 		Event event = Event.builder()
 				.name(eventRequest.name())
@@ -69,7 +69,7 @@ public class EventServiceImpl implements EventService {
 		event.addParticipant(creator);
 
 		for (String email : eventRequest.inviteEmails()) {
-			participantService.findParticipantByEmail(email).ifPresent(event::addParticipant);
+			participantService.findParticipantById(email).ifPresent(event::addParticipant);
 		}
 
 		return eventRepository.save(event);
