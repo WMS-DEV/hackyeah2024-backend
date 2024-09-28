@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wmsdev.sportly.dto.CategoryDTO;
 import pl.wmsdev.sportly.mapper.CategoryMapper;
+import pl.wmsdev.sportly.model.Category;
 import pl.wmsdev.sportly.repository.CategoryRepository;
 
 import java.util.List;
@@ -20,5 +21,10 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryRepository.findAll().stream()
 				.map(categoryMapper::categoryToCategoryDTO)
 				.toList();
+	}
+
+	@Override
+	public Category getCategoryById(Long id) {
+		return categoryRepository.findById(id).orElseThrow();
 	}
 }

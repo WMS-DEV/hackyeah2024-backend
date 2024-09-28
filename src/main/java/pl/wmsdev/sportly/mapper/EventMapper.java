@@ -13,6 +13,4 @@ public interface EventMapper {
 	@Mapping(source = "maxParticipants", target = "maxNumberOfParticipants")
 	@Mapping(source = "ageGroup", target = "age")
 	EventDTO eventToEventDTO(Event event);
-
-
 }
