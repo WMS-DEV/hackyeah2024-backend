@@ -12,6 +12,8 @@ import pl.wmsdev.sportly.model.Participant;
 import pl.wmsdev.sportly.repository.EventRepository;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -68,9 +70,10 @@ public class EventServiceImpl implements EventService {
 
 		event.addParticipant(creator);
 
-		for (String email : eventRequest.inviteEmails()) {
-			participantService.findParticipantById(email).ifPresent(event::addParticipant);
-		}
+		Optional.ofNullable(eventRequest.inviteEmails())
+				.ifPresent(emails -> emails.forEach(email -> {
+					participantService.findParticipantById(email).ifPresent(event::addParticipant);
+				}));
 
 		return eventRepository.save(event);
 	}
