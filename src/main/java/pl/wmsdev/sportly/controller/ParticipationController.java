@@ -17,17 +17,17 @@ public class ParticipationController {
 
 	@PostMapping("/join")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@Operation(summary = "Join event by id")
+	@Operation(summary = "Join event by id", description = "Provide participantId or participantEmail")
 	public ResponseEntity<?> joinEvent(@PathVariable Long eventId, @RequestBody ParticipationRequest participationRequest) {
-		eventService.joinEvent(eventId, participationRequest.participantId());
+		eventService.joinEvent(eventId, participationRequest);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PostMapping("/leave")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	@Operation(summary = "Leave event by id")
+	@Operation(summary = "Leave event by id", description = "Provide participantId or participantEmail")
 	public ResponseEntity<?> leaveEvent(@PathVariable Long eventId, @RequestBody ParticipationRequest participationRequest) {
-		eventService.leaveEvent(eventId, participationRequest.participantId());
+		eventService.leaveEvent(eventId, participationRequest);
 		return ResponseEntity.noContent().build();
 	}
 }

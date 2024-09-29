@@ -5,6 +5,7 @@ import org.springframework.security.web.firewall.RequestRejectedException;
 import org.springframework.stereotype.Service;
 import pl.wmsdev.sportly.dto.EventDTO;
 import pl.wmsdev.sportly.dto.EventRequest;
+import pl.wmsdev.sportly.dto.ParticipationRequest;
 import pl.wmsdev.sportly.mapper.EventMapper;
 import pl.wmsdev.sportly.model.Category;
 import pl.wmsdev.sportly.model.Event;
@@ -88,9 +89,9 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void joinEvent(Long eventId, Long participantId) {
+	public void joinEvent(Long eventId, ParticipationRequest participationRequest) {
 		Event event = eventRepository.findById(eventId).orElseThrow();
-		Participant participant = participantService.findParticipantById(participantId).orElseThrow();
+		Participant participant = getParticipant(participationRequest);
 
 		if (event.getMaxParticipants() == event.getParticipants().size()) {
 			throw new RequestRejectedException("Event is full");
@@ -101,15 +102,19 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public void leaveEvent(Long eventId, Long participantId) {
+	public void leaveEvent(Long eventId, ParticipationRequest participationRequest) {
 		Event event = eventRepository.findById(eventId).orElseThrow();
-		Participant participant = participantService.findParticipantById(participantId).orElseThrow();
-
-		if (participant.equals(event.getCreator())) {
-			throw new RequestRejectedException("Creator cannot leave the event, cancel it instead");
-		}
+		Participant participant = getParticipant(participationRequest);
 
 		event.removeParticipant(participant);
 		eventRepository.save(event);
+	}
+
+	private Participant getParticipant(ParticipationRequest participationRequest) {
+		if (Objects.isNull(participationRequest.participantId())) {
+			return participantService.findParticipantByEmail(participationRequest.participantEmail()).orElseThrow();
+		} else {
+			return participantService.findParticipantById(participationRequest.participantId()).orElseThrow();
+		}
 	}
 }

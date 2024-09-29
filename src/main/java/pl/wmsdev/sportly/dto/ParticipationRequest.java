@@ -1,4 +1,4 @@
 package pl.wmsdev.sportly.dto;
 
-public record ParticipationRequest (Long participantId) {
+public record ParticipationRequest (Long participantId, String participantEmail) {
 }
