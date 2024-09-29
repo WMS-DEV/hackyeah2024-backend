@@ -12,7 +12,7 @@ public interface ParticipantService {
 
 	ParticipantDTO getParticipantWithEventsById(Long id);
 
-	Optional<Participant> findParticipantById(String email);
+	Optional<Participant> findParticipantByEmail(String email);
 
 	Participant registerParticipant(ParticipantRequest participantRequest);
 }

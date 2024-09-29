@@ -38,7 +38,7 @@ public class EventController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	@Operation(summary = "Create new event")
+	@Operation(summary = "Create new event", description = "Provide necessary params, and either creatorId or creatorEmail")
 	public ResponseEntity<?> createEvent(@RequestBody EventRequest eventRequest) {
 		Event event = eventService.createEvent(eventRequest);
 		return ResponseEntity.created(URI.create("/api/v1/events/" + event.getId())).build();

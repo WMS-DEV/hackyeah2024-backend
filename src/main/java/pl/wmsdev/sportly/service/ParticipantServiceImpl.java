@@ -23,7 +23,7 @@ public class ParticipantServiceImpl implements ParticipantService {
 	}
 
 	@Override
-	public Optional<Participant> findParticipantById(String email) {
+	public Optional<Participant> findParticipantByEmail(String email) {
 		return participantRepository.findByEmail(email);
 	}
 

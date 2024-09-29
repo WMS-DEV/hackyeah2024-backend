@@ -48,7 +48,12 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public Event createEvent(EventRequest eventRequest) {
 
-		Participant creator = participantService.findParticipantById(eventRequest.creatorId()).orElseThrow();
+		Participant creator;
+		if (Objects.isNull(eventRequest.creatorId())) {
+			creator = participantService.findParticipantByEmail(eventRequest.creatorEmail()).orElseThrow();
+		} else {
+			creator = participantService.findParticipantById(eventRequest.creatorId()).orElseThrow();
+		}
 		Category category = categoryService.getCategoryById(eventRequest.categoryId());
 
 		Event event = Event.builder()
@@ -72,7 +77,7 @@ public class EventServiceImpl implements EventService {
 
 		Optional.ofNullable(eventRequest.inviteEmails())
 				.ifPresent(emails -> emails.forEach(email -> {
-					participantService.findParticipantById(email).ifPresent(event::addParticipant);
+					participantService.findParticipantByEmail(email).ifPresent(event::addParticipant);
 				}));
 
 		return eventRepository.save(event);
